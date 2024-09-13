@@ -70,6 +70,7 @@ def draw_lines(image, lines_left, lines_right):
 
     # Variáveis para armazenar os pontos para a linha horizontal
     pt1_left = pt1_right = None
+    pt2_left = pt2_right = None
 
     # Desenhar as linhas do lado esquerdo (verde)
     if lines_left:
@@ -110,37 +111,29 @@ def draw_lines(image, lines_left, lines_right):
         print(pt1_left, pt1_right )
 
         # Calcular o ponto médio da linha horizontal
-        mid_x = (pt1_left[0] + pt1_right[0]) // 2
-        mid_y = (pt1_left[1] + pt1_right[1]) // 2
+        mid_x1 = (pt1_left[0] + pt1_right[0]) // 2
+        mid_y1 = (pt1_left[1] + pt1_right[1]) // 2    
 
-        # Definir o comprimento da linha vermelha (por exemplo, 100 pixels)
-        line_height = 400
-
-        # Desenhar a linha vertical vermelha a partir do ponto médio (controlando o tamanho)
-        start_y = max(mid_y - line_height // 2, 0)  # Garantir que não passe do topo da imagem
-        end_y = min(mid_y + line_height // 2, height)  # Garantir que não passe do final da imagem
-        cv.line(line_image, (mid_x, start_y), (mid_x, end_y), (0, 0, 255), 2)
     if pt2_left and pt2_right:
         # Desenhar linha horizontal entre os dois pontos
         cv.line(line_image, pt2_left, pt2_right, (0, 255, 255), 2)
-        print(pt2_left, pt2_right )
+        #print(pt2_left, pt2_right )
 
         # Calcular o ponto médio da linha horizontal
-        mid_x = (pt2_left[0] + pt2_right[0]) // 2
-        mid_y = (pt2_left[1] + pt2_right[1]) // 2
+        mid_x2 = (pt2_left[0] + pt2_right[0]) // 2
+        mid_y2 = (pt2_left[1] + pt2_right[1]) // 2      
 
-        # Definir o comprimento da linha vermelha (por exemplo, 100 pixels)
-        line_height = 100
+    # Desenhar a linha vertical vermelha e  a partir do ponto médio (controlando o tamanho)
+    cv.line(line_image, (mid_x1, mid_y1), (mid_x1, mid_y2), (0, 0, 255), 2)
+    cv.line(line_image, (mid_x2, mid_y1), (mid_x2, mid_y2), (240, 0, 255), 2)
 
-        # Desenhar a linha vertical vermelha a partir do ponto médio (controlando o tamanho)
-        start_y = max(mid_y - line_height // 2, 0)  # Garantir que não passe do topo da imagem
-        end_y = min(mid_y + line_height // 2, height)  # Garantir que não passe do final da imagem
-        cv.line(line_image, (mid_x, start_y), (mid_x, end_y), (240, 0, 255), 2)
+    #Desenhar a linha da hipotenusa
+    cv.line(line_image, (mid_x2, mid_y1), (mid_x1, mid_y2), (240, 99, 230), 2)
 
-        
     # Combinar a imagem original com as linhas desenhadas
     combined_image = cv.addWeighted(image, 0.8, line_image, 1, 0)
     return combined_image
+
 
 def main():
     cap = cv.VideoCapture(0)
